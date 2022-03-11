@@ -4,7 +4,7 @@ const transporter=require('../configs/mailer');
 const schedule= require('node-schedule');
 const Schedule=require('../model/schedule.model');
 
-const convert=require('../DateConert/date')
+const convert=require('../DateConvert/date')
 const router=express.Router();
 console.log(new Date())
 router.get('/', async(req,res)=>{
