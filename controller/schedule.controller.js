@@ -39,7 +39,7 @@ router.post('/',async(req,res)=>{
                else if(el.time.slice(2)==="hour later" || el.time.slice(2)==="hours later"){
                     var curr=new Date();
                     curr.setHours(curr.getHours() + Number(el.time[0]));
-                    schedule.scheduleJob(curr,()=>{
+                    setTimeout(()=>{
                         transporter.sendMail(message,((er,info)=>{
                             if(er){
                                 console.log(er)
@@ -47,12 +47,13 @@ router.post('/',async(req,res)=>{
                                 console.log(info)
                             }
                         }));
-                    })
+                    },curr.getTime()-new Date().getTime())
+                        
+                    
                 }
                 else{
-                    var curr=convert(el.time);
-                    curr.setHours(curr.getHours() + el.time[0]);
-                    schedule.scheduleJob(curr,()=>{
+                    var curr=convert(el.time).getTime();
+                    setTimeout(()=>{
                         transporter.sendMail(message,((er,info)=>{
                             if(er){
                                 console.log(er)
@@ -60,7 +61,7 @@ router.post('/',async(req,res)=>{
                                 console.log(info)
                             }
                         }));
-                    })
+                    },new Date().getTime()-curr.getTime());
                 }
             });
             res.status(201).json({schedules});
@@ -86,7 +87,7 @@ router.post('/',async(req,res)=>{
        else if(req.body.time.slice(2)==="hour later" || req.body.time.slice(2)==="hours later"){
             var curr=new Date();
             curr.setHours(curr.getHours() + Number(req.body.time[0]));
-            schedule.scheduleJob(curr,()=>{
+            setTimeout(()=>{
                 transporter.sendMail(message,((er,info)=>{
                     if(er){
                         console.log(er)
@@ -94,20 +95,19 @@ router.post('/',async(req,res)=>{
                         console.log(info)
                     }
                 }));
-            })
+            },new Date().getTime()-curr.getTime())
         }
         else{
             var curr=convert(req.body.time);
-            curr.setHours(curr.getHours() + req.body.time[0]);
             schedule.scheduleJob(curr,()=>{
-                transporter.sendMail(message,((er,info)=>{
+               setTimeout(message,((er,info)=>{
                     if(er){
                         console.log(er)
                     }else{
                         console.log(info)
                     }
                 }));
-            })
+            },new Date().getTime()-curr.getTime())
         }
         res.status(201).json({schedules});
     }
