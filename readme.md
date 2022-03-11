@@ -1,10 +1,13 @@
-# Start
+# START THROUGH DEPLOYED LINK
+- ``` https://nameless-cliffs-08834.herokuapp.com/schedule ```
+
+# RUN PROJECT IN LOCAL MACHINE
 - Go to the main directory of project
 
  ``` npm start ```
 
 - Open Postman
-  - enter     ``` http://localhost:1234/schedule ``` in the post request url
+  - enter     ``` http://localhost:1234/schedule ``` or ```https://nameless-cliffs-08834.herokuapp.com/schedule``` in the post request url
   - enter following input in body section
     - email   
     - time
