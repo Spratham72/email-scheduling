@@ -1,7 +1,6 @@
 const mongoose=require('mongoose');
 const express=require('express');
 const transporter=require('../configs/mailer');
-const schedule= require('node-schedule');
 const Schedule=require('../model/schedule.model');
 
 const convert=require('../DateConvert/date')
@@ -47,7 +46,7 @@ router.post('/',async(req,res)=>{
                                 console.log(info)
                             }
                         }));
-                    },curr.getTime()-new Date().getTime())
+                    },(curr.getTime())-new Date().getTime())
                         
                     
                 }
@@ -61,7 +60,7 @@ router.post('/',async(req,res)=>{
                                 console.log(info)
                             }
                         }));
-                    },new Date().getTime()-curr.getTime());
+                    },curr.getTime()-new Date().getTime());
                 }
             });
             res.status(201).json({schedules});
@@ -87,6 +86,7 @@ router.post('/',async(req,res)=>{
        else if(req.body.time.slice(2)==="hour later" || req.body.time.slice(2)==="hours later"){
             var curr=new Date();
             curr.setHours(curr.getHours() + Number(req.body.time[0]));
+            console.log(curr.getTime());
             setTimeout(()=>{
                 transporter.sendMail(message,((er,info)=>{
                     if(er){
@@ -95,7 +95,7 @@ router.post('/',async(req,res)=>{
                         console.log(info)
                     }
                 }));
-            },new Date().getTime()-curr.getTime())
+            },(curr.getTime()-new Date().getTime()))
         }
         else{
             var curr=convert(req.body.time);
@@ -107,7 +107,7 @@ router.post('/',async(req,res)=>{
                         console.log(info)
                     }
                 }));
-            },new Date().getTime()-curr.getTime())
+            },curr.getTime()-new Date().getTime())
         }
         res.status(201).json({schedules});
     }
