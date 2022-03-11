@@ -16,6 +16,7 @@ router.get('/', async(req,res)=>{
 })
 router.post('/',async(req,res)=>{
     try {
+      
         //FOR ARRAY INPUT
         if(Array.isArray(req.body)){
             const schedules=await Schedule.create(req.body);
@@ -38,6 +39,7 @@ router.post('/',async(req,res)=>{
                else if(el.time.slice(2)==="hour later" || el.time.slice(2)==="hours later"){
                     var curr=new Date();
                     curr.setHours(curr.getHours() + Number(el.time[0]));
+                    console.log("hour"+(curr-new Date().getTime()));
                     setTimeout(()=>{
                         transporter.sendMail(message,((er,info)=>{
                             if(er){
@@ -46,12 +48,14 @@ router.post('/',async(req,res)=>{
                                 console.log(info)
                             }
                         }));
-                    },(curr.getTime())-new Date().getTime())
+                    },((curr.getTime())-new Date().getTime()))
                         
                     
                 }
                 else{
                     var curr=convert(el.time).getTime();
+                    
+                    console.log("MIN"+(curr-new Date().getTime()));
                     setTimeout(()=>{
                         transporter.sendMail(message,((er,info)=>{
                             if(er){
@@ -60,7 +64,7 @@ router.post('/',async(req,res)=>{
                                 console.log(info)
                             }
                         }));
-                    },curr.getTime()-new Date().getTime());
+                    },(curr-new Date().getTime())/160);
                 }
             });
             res.status(201).json({schedules});
@@ -73,7 +77,7 @@ router.post('/',async(req,res)=>{
             subject: req.body.subject,
             text: req.body.body,
           };
-
+          console.log(req.body.time)
           if(req.body.time==="now"){
             transporter.sendMail(message,((er,info)=>{
                 if(er){
@@ -86,7 +90,7 @@ router.post('/',async(req,res)=>{
        else if(req.body.time.slice(2)==="hour later" || req.body.time.slice(2)==="hours later"){
             var curr=new Date();
             curr.setHours(curr.getHours() + Number(req.body.time[0]));
-            console.log(curr.getTime());
+            console.log("MIN"+(curr.getTime()-new Date().getTime()));
             setTimeout(()=>{
                 transporter.sendMail(message,((er,info)=>{
                     if(er){
@@ -99,15 +103,16 @@ router.post('/',async(req,res)=>{
         }
         else{
             var curr=convert(req.body.time);
-            schedule.scheduleJob(curr,()=>{
-               setTimeout(message,((er,info)=>{
+            console.log(curr.getTime()-new Date().getTime())
+            setTimeout(()=>{
+                transporter.sendMail(message,((er,info)=>{
                     if(er){
                         console.log(er)
                     }else{
                         console.log(info)
                     }
                 }));
-            },curr.getTime()-new Date().getTime())
+            },(curr.getTime()-new Date().getTime())/160)
         }
         res.status(201).json({schedules});
     }
