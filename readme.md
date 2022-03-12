@@ -7,7 +7,7 @@
  ``` npm start ```
 
 - Open Postman
-  - enter     ``` http://localhost:1234/schedule ``` or ```https://nameless-cliffs-08834.herokuapp.com/schedule``` in the post request url
+  - enter     ``` http://localhost:1234/schedule ``` in the post request url
   - enter following input in body section
     - email   
     - time
